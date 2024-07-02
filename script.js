@@ -1,4 +1,9 @@
-fullsScreenButton = document.getElementById("fullScreenButton");
+
+
+
+
+
+let fullScreenButton;
 
 function requestFullScreen() {
 
@@ -66,7 +71,7 @@ function requestFullScreen() {
 
 
 
-  fullsScreenButton.addEventListener("click", requestFullScreen);
+ 
 
 
 
@@ -75,13 +80,11 @@ const DURATION = 40;
 const FRAMES = 350;
 
 
-let buttonR = document.getElementById("buttonR");
-let buttonL = document.getElementById("buttonL");
-let model = document.getElementById("model");
-model.setAttribute('animation-mixer', {timeScale:0, duration:40});
 
-let currentState = 1;
-//              
+
+
+
+let currentState = 0;             
 let sceneFrames = [1,       55,         105,        122,        150,        181,        350];
 let lightColor = [[1,1,1],  [1,1,1],    [1,1,1],    [1,1,1],    [1,1,1],    [0,1,0],    [0,1,0],[0,1,0],[0,1,0],];
 let titleText = [1,2,3,4,5,6,7,8,9,10]
@@ -116,42 +119,7 @@ function changeLightColor(color){
     })
 }
 
-textTitle = document.getElementById("textTitle");
-textContent = document.getElementById("textContent");
 
-model.addEventListener("model-loaded", ()=>{
-    setTimeout(function(){
-
-        const obj = model.getObject3D('mesh');
-
-        obj.traverse(node => {
-            if(node.material){
-                if(node.material.name == "Glass.001"){
-                    console.log(node);
-                    node.material.opacity = 0.4;
-                    node.material.roughness = 0.1;
-                    node.material.metalness=0;
-                    node.material.transparent = true;
-                }
-                
-
-                /*
-                objChild.forEach(child => {
-                    if(child.name == "NAUO6007"){
-                        child.material.color.r=1;
-                        console.log(child.material.color);
-                    }
-                    
-                });*/
-            }
-            
-        })
-
-    }, 1000);
-
-
-
-})
 
 
 let buttonActive = true;
@@ -191,6 +159,7 @@ function animate(direction){
 
 
     currentState = currentState + direction;
+    let model = document.getElementById("model");
     model.setAttribute('animation-mixer', {timeScale:direction});
 
     setTimeout(function(){
@@ -214,13 +183,101 @@ function animate(direction){
 
 
 
-buttonR.addEventListener("click", function(){
-    animate(1);
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    fullsScreenButton = document.getElementById("fullScreenButton");
+    let buttonR = document.getElementById("buttonR");
+    let buttonL = document.getElementById("buttonL");
+    textTitle = document.getElementById("textTitle");
+    textContent = document.getElementById("textContent");
+    let startAR = document.getElementById("startAR");
+
+	const sceneEl = document.querySelector('a-scene');
+	let arSystem;
+	sceneEl.addEventListener('loaded', function () {
+	  arSystem = sceneEl.systems["mindar-image-system"];
+	});
+
+
+    model.addEventListener("model-loaded", ()=>{
+        setTimeout(function(){
+    
+            const obj = model.getObject3D('mesh');
+    
+            obj.traverse(node => {
+                if(node.material){
+                    if(node.material.name == "Glass.001"){
+                        console.log(node);
+                        node.material.opacity = 0.4;
+                        node.material.roughness = 0.1;
+                        node.material.metalness=0;
+                        node.material.transparent = true;
+                    }
+                }
+            })
+        }, 1000);
+    })
+    
+    
+
+
+        
+    fullsScreenButton.addEventListener("click", requestFullScreen);
+
+    const target = document.getElementById("target");
+    const dimmer = document.getElementById("dimmer");
+
+
+    target.addEventListener("targetFound", function(){
+        setTimeout(function(){
+            dimmer.style.opacity = "0.9";
+            buttonR.parentElement.classList.add("elevate");
+            buttonR.addEventListener("click", function firstStep(){
+
+                buttonR.removeEventListener("click", firstStep);
+                dimmer.style.display="none";
+
+                animate(1);
+
+                buttonR.addEventListener("click", function(){
+                    animate(1);
+                });
+                
+                buttonL.addEventListener("click", function(){
+                    animate(-1);
+                });
+
+            })
+            buttonL.classList.add("inactive");
+
+        }, 250);
+
+    });
+    
+
+
+
+    startAR.addEventListener("click", function(){
+        arSystem.start();
+        document.getElementById("loadingScreen").style.display="none";
+    });
+
+
+
+
 })
 
-buttonL.addEventListener("click", function(){
-    animate(-1);
-})
+
+
+
+
+
+
 
 //100, 110, 118, 138, 159, 169, 229, 262, 273, 304,
 

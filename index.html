@@ -10,15 +10,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
+      <script src="script.js"></script>
   </head>
   <body>
     <div class="buttonContainer right">
-      <div class = "navButton" id="buttonL"><span class="material-icons md">
+      <div class = "navButton " id="buttonL"><span class="material-icons md">
         arrow_back
         </span></div>
       <div class = "navButton" id="buttonR"><span class="material-icons md">
         arrow_forward
         </span></div>
+    </div>
+
+    <div id="dimmer" class="dimmer">
+        Use the arrow keys to navigate through the steps of the workflow.
     </div>
 
     <div id = "fullScreenButton" class="buttonContainer left">
@@ -29,32 +34,72 @@
 
     <div class="textContent">
       <div id = "textTitle" class = "textTitle">
-        Step 1
+        Instruction
       </div>
       <br>
       <div id = "textContent">
-        The Mobile Stroke Unit (MSU) arrives to a suspected stroke patient within the golden hour of stroke symptoms.
+        Point the camera at the exhibition poster.
       </div>
       
     </div>
 
-    <a-scene arjs='sourceType: webcam;' mindar-image="filterMinCF:0.002; filterBeta:0.002; imageTargetSrc: ./palm.mind" color-space="sRGB" renderer="colorManagement: true; physicallyCorrectLights:true; highRefreshRate:true;" vr-mode-ui="enabled: false" xr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+    </div>
+
+    <div id="scanning-overlay" class="hidden">
+      <div class="inner">
+        <img src="D4H Poster PALM.jpg">
+        <div class="scanline"></div>
+      </div>
+
+      
+
+    </div>
+    
+
+    <div id="loadingScreen" class="loadingScreen">
+
+      <div class="logo">
+        <img src="Monash+DHCL-Normal.png">
+        <img src="micro-x-logo-2021-@2x.png">
+      </div>
+
+      <div class="textTitle">
+        Hello!
+      </div>
+      <br>
+      <div class="textBody">
+        This is an AR showcase of the workflow. Project description lorem ipsum placeholder text.
+        <br><br>
+        Something something project TOMO placeholer text
+      </div>
+
+
+
+      <div class="textContent" id="startAR">
+        Start AR
+      </div>
+
+ 
+      
+    </div>
+
+    <a-scene arjs='sourceType: webcam;' mindar-image="uiScanning:#scanning-overlay; filterMinCF:0.002; filterBeta:0.002; imageTargetSrc: ./palm.mind; autoStart: false;" color-space="sRGB" renderer="colorManagement: true; physicallyCorrectLights:true; highRefreshRate:true;" vr-mode-ui="enabled: false" xr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
       <a-assets>
 	<a-asset-item id="avatarModel" src="ambo_FULL_2.glb"></a-asset-item>
       </a-assets>
 
       <a-entity light="type: directional; color: #EEE; intensity: 5; castShadow:true;" position="-1 1 1"></a-entity>
 
-      <a-entity light="type: ambient; color: #CCC; castShadow:true;"></a-entity>
+      <a-entity light="type: ambient; color: #CCC;"></a-entity>
 
       <a-camera look-controls="enabled: false"></a-camera>
 
-      <a-entity mindar-image-target="targetIndex: 0">
+      <a-entity id="target" mindar-image-target="targetIndex: 0">
         
         <a-gltf-model id = "model" rotation="0 90 0" position="-1 -0.25 -0.1" scale="0.19 0.19 0.19" src="#avatarModel" animation-mixer="timeScale: 0, duration:40, loop:once, clampWhenFinished:true;">
       </a-entity>
     </a-scene>
-    <script src="script.js"></script>
+    
   </body>
 </html>
 
