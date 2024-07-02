@@ -261,8 +261,9 @@ document.addEventListener("DOMContentLoaded", function() {
     
 
 
-
+    startAR.innerText = "Start AR";
     startAR.addEventListener("click", function(){
+        
         arSystem.start();
         document.getElementById("loadingScreen").style.display="none";
     });
