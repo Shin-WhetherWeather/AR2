@@ -10,6 +10,7 @@ body, html{
     font-family: "Roboto", sans-serif;
     font-weight: 600;
     font-style: normal;
+    font-size: 17px;
 }
 
 .buttonContainer{
@@ -36,12 +37,14 @@ body, html{
     display: flex;
     flex-direction: column;
     padding: 12px;
+    
 }
 
 .logo>img{
-    height: 70px;
-    width: auto;
+    height: auto;
+    width: 200px;
     padding: 12px;
+    align-self: flex-start;
 }
 
 .textContent{
@@ -136,8 +139,8 @@ body, html{
 
 .inner{
     display: flex;
-    width: 75vw;
-    height: fit-content;
+    max-width: 75vw;
+    max-height: 60vh;
     position: relative;
     justify-content: center;
     align-items: center;
@@ -157,8 +160,8 @@ body, html{
 
 
 .inner>img{
-    width: 100%;
-    height: auto;
+    max-height: 60vh;
+    max-width: 75vw;
     opacity: 0.5;
     align-self: center;
     padding:22px;
@@ -179,3 +182,16 @@ body, html{
 .elevate{
     z-index: 4000;
 }
+
+.inlineImg{
+    width: 100%;
+    height: auto;
+}
+
+
+@media (orientation: landscape) {
+    .material-icons.md { font-size: 30px; }
+    .textContent{ font-size: 12px;}
+    .inlineImg{display: none;}
+}
+

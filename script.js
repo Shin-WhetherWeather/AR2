@@ -85,15 +85,18 @@ const FRAMES = 350;
 
 
 let currentState = 0;             
-let sceneFrames = [1,       55,         105,        122,        150,        181,        350];
-let lightColor = [[1,1,1],  [1,1,1],    [1,1,1],    [1,1,1],    [1,1,1],    [0,1,0],    [0,1,0],[0,1,0],[0,1,0],];
+let sceneFrames = [1,       55,         105,        122,        150,        181,        252,        300,        380];
+let lightColor = [[1,1,1],  [1,1,1],    [1,1,1],    [1,1,1],    [1,1,1],    [0,1,0],    [1,1,0],    [1,1,1],    [1,1,1], [1,1,1]];
 let titleText = [1,2,3,4,5,6,7,8,9,10]
-let sceneText = ["The Mobile Stroke Unit (MSU) arrives to a suspected stroke patient within the golden hour of stroke symptoms.",
+let sceneText = ["The ambulance arrives to a suspected stroke patient within the golden hour of stroke symptoms.",
     "The paramedics retrieve the patient and strap them to a stretcher.",
     "The PAD is placed under the patient.",
     "The Imager is unlatched from the wall and extended.",
     "The Detector is unlatched from the wall and attached to the Imager. The system is now ready for scanning.",
-    "The patient is pushed into the MSU on the stretcher."]
+    "The patient is pushed into the ambulance on the stretcher.",
+    "The 21 x-ray tubes fire in sequence through 3 angles to complete a cranial scan.",
+    "The scan is complete, the detector and imager are retracted and mounted back onto the wall.",
+    "The PAD is mounted back into the wall. The ambulance is now ready to depart to the hospital."]
 
 function changeLightColor(color){
     const obj = model.getObject3D('mesh');
@@ -193,6 +196,10 @@ document.addEventListener("DOMContentLoaded", function() {
     fullsScreenButton = document.getElementById("fullScreenButton");
     let buttonR = document.getElementById("buttonR");
     let buttonL = document.getElementById("buttonL");
+
+    buttonL.classList.add("inactive");
+    buttonR.classList.add("inactive");
+
     textTitle = document.getElementById("textTitle");
     textContent = document.getElementById("textContent");
     let startAR = document.getElementById("startAR");
@@ -237,6 +244,7 @@ document.addEventListener("DOMContentLoaded", function() {
         setTimeout(function(){
             dimmer.style.opacity = "0.9";
             buttonR.parentElement.classList.add("elevate");
+            buttonR.classList.remove("inactive");
             buttonR.addEventListener("click", function firstStep(){
 
                 buttonR.removeEventListener("click", firstStep);
