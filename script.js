@@ -85,7 +85,7 @@ const FRAMES = 350;
 
 
 let currentState = 0;             
-let sceneFrames = [1,       55,         105,        122,        150,        181,        252,        300,        380];
+let sceneFrames = [1,       57,         105,        122,        150,        181,        252,        300,        380];
 let lightColor = [[1,1,1],  [1,1,1],    [1,1,1],    [1,1,1],    [1,1,1],    [0,1,0],    [1,1,0],    [1,1,1],    [1,1,1], [1,1,1]];
 let titleText = [1,2,3,4,5,6,7,8,9,10]
 let sceneText = ["The ambulance arrives to a suspected stroke patient within the golden hour of stroke symptoms.",
@@ -122,12 +122,66 @@ function changeLightColor(color){
     })
 }
 
+let person;
+let cones =[];
+
+
+
+let fadeConeID = [];
+let fadeConeIndex = [];
+
+function fadeCone(i){
+
+    if(fadeConeIndex[i] >= 16){
+        clearInterval(fadeConeID[i]);
+        cones[i].material.opacity = 0.5;
+        cones[i].visible = false;
+        return;
+    }
+    cones[i].material.opacity = Math.max(-(0.65/19)*fadeConeIndex[i] + 0.65, 0);
+    fadeConeIndex[i]++;
+    
+}
+
+function beams(){
+    for(let i = 0; i < cones.length; i++){
+        setTimeout(function(){
+            cones[i].visible = true;
+
+            fadeConeIndex[i] = 0;
+            fadeConeID[i] = setInterval(function(){
+                fadeCone(i);
+            }, 8);
+        }, 55*i);
+
+
+        setTimeout(function(){
+            cones[i].visible = true;
+
+            fadeConeIndex[i] = 0;
+            fadeConeID[i] = setInterval(function(){
+                fadeCone(i);
+            }, 8);
+        }, 2650+ 55*i);
+
+        setTimeout(function(){
+            cones[i].visible = true;
+
+            fadeConeIndex[i] = 0;
+            fadeConeID[i] = setInterval(function(){
+                fadeCone(i);
+            }, 8);
+        }, 5300+ 55*i);
+    }
+}
 
 
 
 let buttonActive = true;
 
 function animate(direction){
+
+
     if(buttonActive == false){
         return;
     }
@@ -139,6 +193,19 @@ function animate(direction){
     let mil;
 
     if(direction == 1){
+        if(currentState == 1){
+            setTimeout(function(){
+                person.material.opacity = 1;
+            },DURATION*(sceneFrames[currentState] - sceneFrames[currentState - 1])*700/FRAMES);
+           
+        }
+
+        if(currentState == 6){
+            beams();
+        }
+
+
+
         
         if(currentState > sceneFrames.length - 1){
             return;
@@ -150,6 +217,19 @@ function animate(direction){
 
     }
     else if(direction == -1){
+        if(currentState == 2){
+            setTimeout(function(){
+                person.material.opacity = 0;
+            },DURATION*(sceneFrames[currentState-1] - sceneFrames[currentState-2])*300/FRAMES);
+        }
+
+        if(currentState == 7){
+            setTimeout(function(){
+                beams();
+            },1200)
+        }
+
+
         
         if(currentState <= 1){
             return;
@@ -212,6 +292,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
     model.addEventListener("model-loaded", ()=>{
+
+        startAR.innerText = "Start AR";
+        startAR.classList.remove("inactive");
+        startAR.addEventListener("click", function(){
+            
+            arSystem.start();
+            document.getElementById("loadingScreen").style.display="none";
+        });
+
+
         setTimeout(function(){
     
             const obj = model.getObject3D('mesh');
@@ -225,8 +315,32 @@ document.addEventListener("DOMContentLoaded", function() {
                         node.material.metalness=0;
                         node.material.transparent = true;
                     }
+
+                    if(node.material.name.includes("Human.002")){
+                        person = node;
+                        person.material.transparent = true;
+                        person.material.opacity = 0;
+                    }
+
+                    if(node.name.includes("x-ray-cone")){
+                        node.material = node.material.clone();
+                        cones.push(node);
+                        node.material.flatShading = true;
+                        node.material.clipIntersection = true;
+                        node.material.emissive.r=0;
+                        node.material.emissive.g=0.2;
+                        node.material.emissive.b=1;
+                        node.material.transparent = true;
+                        node.material.opacity = 0.5;
+                        node.visible = false;
+                    }
                 }
-            })
+            }
+        );
+
+        cones.sort((a,b) => a.name.localeCompare(b.name) );
+        cones = cones.reverse();
+
         }, 1000);
     })
     
@@ -265,15 +379,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
         }, 250);
 
-    });
-    
-
-
-    startAR.innerText = "Start AR";
-    startAR.addEventListener("click", function(){
-        
-        arSystem.start();
-        document.getElementById("loadingScreen").style.display="none";
     });
 
 

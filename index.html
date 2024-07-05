@@ -78,7 +78,7 @@
 
 
 
-      <div class="textContent" id="startAR">
+      <div class="textContent inactive" id="startAR">
         Loading....
       </div>
 
@@ -88,7 +88,7 @@
 
     <a-scene arjs='sourceType: webcam;' mindar-image="uiScanning:#scanning-overlay; filterMinCF:0.002; filterBeta:0.002; imageTargetSrc: ./palm.mind; autoStart: false;" color-space="sRGB" renderer="colorManagement: true; physicallyCorrectLights:true; highRefreshRate:true;" vr-mode-ui="enabled: false" xr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
       <a-assets>
-	<a-asset-item id="avatarModel" src="ambo_lite.glb"></a-asset-item>
+	<a-asset-item id="avatarModel" src="ambo_person.glb"></a-asset-item>
       </a-assets>
 
       <a-entity light="type: directional; color: #EEE; intensity: 5; castShadow:true;" position="-1 1 1"></a-entity>
